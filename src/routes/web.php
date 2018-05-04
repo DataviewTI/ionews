@@ -18,14 +18,14 @@
 Route::group(['prefix' => 'admin', 'middleware' => ['web','admin'], 'as' => 'admin.'],function(){
     Route::group(['prefix' => 'news'], function () {
     Route::get('/','NewsController@index');
-    Route::post('store', 'NewsController@store');
+    Route::post('create', 'NewsController@create');
     Route::get('list', 'NewsController@list');
-    Route::get('edit/{id}', 'NewsController@edit');
+    Route::get('view/{id}', 'NewsController@view');
     Route::post('update/{id}', 'NewsController@update');
     Route::get('html-content/{id}', 'NewsController@getHTMLContent');
     Route::get('categories', 'NewsController@getCategories');
     Route::get('subcategories/{catid}', 'NewsController@getSubCategories');
     Route::get('moxieconfig', 'NewsController@moxieConfig');
-    Route::get('destroy/{id}', 'NewsController@destroy');			
+    Route::get('delete/{id}', 'NewsController@delete');			
   });
 });

@@ -3,51 +3,42 @@ namespace Dataview\IONews\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schema;
+use Dataview\IntranetOne\IntranetOne;
+use Dataview\IONews\NewsSeeder;
 use Dataview\IONews\IONewsServiceProvider;
 
 class IONewsInstallCommand extends Command
 {
-    protected $name = 'intranetone-ionews:install';
+    protected $name = 'intranetone-news:install';
 
     protected $description = 'Instalação do serviço para IntranetOne - News';
     public function handle()
     {
-      $loops = [1,2,3,4,5];
-      $msg = [
-        "Love is: never having to say XX% loaded...",
-        "Breaking water...",
-        "Getting stuck in traffic...",
-        "Dividing by 0...",
-        "Crying over spilled milk...",
-        "Generating Lex's voice",
-        "Patching Conics...",
-        "Just a minute, while I dig the dungeon...",
-        "disinfecting germ cells...",
-        "Spinning up the hamster...",
-        "Programming the flux capacitor...",
-        "640K ought to be enough for anybody...",
-        "Checking the gravitational constant in your locale...",
-        "Dig on the 'X' for buried treasure... ARRR!...",
-        "It's still faster than you could draw it..."
-      ];
-
       $this->info('Publicando os arquivos...');
         
-        $i = array_random($loops);
-        while($i--){
-          sleep(array_random($loops));
-          $this->info(array_random($msg));
-        }
-        sleep(1);
+      IntranetOne::installMessages($this);
 
-        Artisan::call('vendor:publish', [
-            '--provider' => IONewsServiceProvider::class,
+      Artisan::call('vendor:publish', [
+          '--provider' => IONewsServiceProvider::class,
+      ]);
+
+      if(!Schema::hasTable('news')){
+        $this->info('Executando migrações news service...');
+        Artisan::call('migrate', [
+          '--path' => 'vendor/dataview/ionews/src/database/migrations',
         ]);
+      }
+          
+      IntranetOne::installMessages($this,2);
 
-        $this->info('migrando tabelas...');
-        Artisan::call('migrate');
+      $this->info('registrando serviço...');
+      Artisan::call('db:seed', [
+        '--class' => NewsSeeder::class,
+      ]);
+
       
       $this->info(' ');
-        $this->info('IntranetOne - News Instalado com sucesso! _|_');
+      $this->info('IntranetOne - News Instalado com sucesso! _|_');
     }
 }

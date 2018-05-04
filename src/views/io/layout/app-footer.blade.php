@@ -1,1 +1,0 @@
-<span style = 'color:#777; float:right' class = 'pr-2'>Dataview Intranet One 2018</span> 

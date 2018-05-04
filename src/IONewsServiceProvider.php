@@ -10,7 +10,7 @@ class IONewsServiceProvider extends ServiceProvider
     public function boot()
     {
       $this->loadViewsFrom(__DIR__.'/views', 'News');
-      $this->loadMigrationsFrom(__DIR__.'/database/migrations');
+      //$this->loadMigrationsFrom(__DIR__.'/database/migrations');
     }
 
 

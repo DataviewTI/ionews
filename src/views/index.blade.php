@@ -1,10 +1,5 @@
 @extends('IntranetOne::io.layout.dashboard')
 
-@section('title')
- @parent | Cadastro de Notícias
-@stop
-
-
 {{-- page level styles --}}
 @section('header_styles')
   <link rel="stylesheet" type="text/css" href="{{ asset('css/pickadate-full.min.css') }}">
@@ -13,7 +8,7 @@
 @stop
 
 @section('main-heading')
-	<h1>Cadastro de Notícias</h1>
+	Cadastro de Notícias
 @stop
 
 @section('main-content')
@@ -21,17 +16,17 @@
 			@component('IntranetOne::io.components.nav-tabs',
 			[
 				"_id" => "default-tablist",
-				"_active"=>1,
+				"_active"=>0,
 				"_tabs"=> [
 					[
 						"tab"=>"Listar",
 						"icon"=>"ico ico-list",
-						"view"=>"News::io.services.news.table-list"
+						"view"=>"News::table-list"
 					],
 					[
 						"tab"=>"Cadastrar",
 						"icon"=>"ico ico-new",
-						"view"=>"News::io.services.news.form"
+						"view"=>"News::form"
 					],
 				]
 			])
