@@ -1,23 +1,15 @@
 <?php
-
 namespace Dataview\IONews;
 
-use Illuminate\Database\Eloquent\Model;
-use Dataview\IntranetOne;
+use Dataview\IntranetOne\IOModel;
+use Dataview\IntranetOne\File as ProjectFile;
+use Dataview\IntranetOne\Group;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
-//use Laravel\Scout\Searchable;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use OwenIt\Auditing\Auditable;
-use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
-
-class News extends Model implements AuditableContract
+class News extends IOModel
 {
-	use SoftDeletes;
-	use Auditable;
-	//use Searchable;
-	protected $auditTimestamps = true;
-	
-	protected $fillable = ['title','subtitle','keywords','content','preview','featured','by','source','date'];
+  protected $fillable = ['title','short_title','subtitle','keywords','content','preview','featured','by','source','date'];
 	protected $casts = [
 			'featured' => 'boolean',
 	];	
@@ -60,7 +52,7 @@ class News extends Model implements AuditableContract
   public static function boot() { 
     parent::boot(); 
 
-    static::saved(function(News $news){
+    /*static::saved(function(News $news){
       //check if group is empty
       if($news->group != null){	
         if(count($news->group->files)==0 && File::exists($path)){
@@ -68,6 +60,15 @@ class News extends Model implements AuditableContract
           File::deleteDirectory($path);
         }
       }
+    });*/
+    
+    static::created(function (News $obj) {
+      $news = new Group([
+        'group' => "Album da Notícia ".$obj->id,
+        'sizes' => $obj->getAppend("sizes")
+      ]);
+      $news->save(); 
+      $obj->group()->associate($news)->save();
     });
   }
 }

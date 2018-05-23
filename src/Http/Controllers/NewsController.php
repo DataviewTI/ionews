@@ -49,41 +49,35 @@ class NewsController extends IOController{
 	}
 
 	public function create(NewsRequest $request){
-
     $check = $this->__create($request);
     if(!$check['status'])
       return response()->json(['errors' => $check['errors'] ], $check['code']);	
+      
+    $obj = new News($request->all());
+    $obj->setAppend("sizes",$request->__dz_copy_params);
+    $obj->save();
 
-      $news = News::create($request->all());
-				$news->categories()->sync($request->__cat_subcats_converted);
-        if(count(json_decode($request->__dz_images))>0){
-					$news->group()->associate(Group::create([
-						'group' => $news->title,
-						'description' => 'Album de imagens vinculada a notícia '.$news->id			
-					]));
+    $obj->categories()->sync($request->__cat_subcats_converted);
+    $obj->group->manageImages(json_decode($request->__dz_images),json_decode($request->__dz_copy_params));
+    $obj->save();
 
-          $news->group->manageImages(json_decode($request->__dz_images),json_decode($request->__dz_copy_params));
+    if($request->video_url != null){
+      $_vdata = json_decode($request->video_data);
+      
+      $news->video()->associate(Video::create([
+        'url' => $request->video_url,
+        'source' => $_vdata->source,
+        'title' => $request->video_title,
+        'description' => $request->video_description,
+        'date' => $request->video_date_submit,
+        'thumbnail' => $request->video_thumbnail,
+        'data' => $request->video_data,
+        'start_at' => $request->start_at
+      ]));
+      $news->save();
+    }
 
-					$news->save();
-				}
-        
-        if($request->video_url != null){
-          $_vdata = json_decode($request->video_data);
-          
-          $news->video()->associate(Video::create([
-            'url' => $request->video_url,
-            'source' => $_vdata->source,
-            'title' => $request->video_title,
-            'description' => $request->video_description,
-            'date' => $request->video_date_submit,
-            'thumbnail' => $request->video_thumbnail,
-            'data' => $request->video_data,
-            'start_at' => $request->start_at
-          ]));
-          $news->save();
-        }
-
-        return response()->json(['success'=>true,'data'=>null]);
+    return response()->json(['success'=>true,'data'=>null]);
 	}
 
 	public function getHTMLContent($id){
@@ -169,7 +163,22 @@ class NewsController extends IOController{
       }
 
 
-    if($_old->group != null)
+      if($_old->group != null){
+        $_old->group->sizes = $_new->sizes;
+        $_old->group->manageImages(json_decode($_new->__dz_images),json_decode($_new->__dz_copy_params));
+        $_old->group->save();
+      }
+      else
+				if(count(json_decode($_new->__dz_images))>0){
+					$_old->group()->associate(Group::create([
+            'group' => "Album da Notícia ".$obj->id,
+            'sizes' => $_new->__dz_copy_params
+            ])
+          );
+					$_old->group->manageImages(json_decode($_new->__dz_images),json_decode($_new->__dz_copy_params));
+				}
+
+      /*if($_old->group != null)
 				$_old->group->manageImages(json_decode($_new->__dz_images),json_decode($_new->__dz_copy_params));
 			else
 			{
@@ -181,7 +190,7 @@ class NewsController extends IOController{
 					]));
 					$_old->group->manageImages(json_decode($_new->__dz_images),json_decode($_new->__dz_copy_params));
 				}
-			}
+      } */
 			
 			$_old->save();
 			return response()->json(['success'=>$_old->save()]);

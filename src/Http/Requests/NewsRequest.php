@@ -12,6 +12,7 @@ class NewsRequest extends IORequest
 		$input['featured'] = (int)($input['__featured']=='true');
 		$input['keywords'] = $input['__keywords'];
     $input['date'] = date($input['date_submit']);
+    $input['sizes'] = $input['__dz_copy_params'];
 
     if(isset($input['video_start_at']))
       $input['start_at'] = str_replace(' ','',date($input['video_start_at']));
