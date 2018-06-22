@@ -1,5 +1,5 @@
 <div class = 'row'>
-  <div class="col-md-7 col-sm-12 pl-1">
+  <div class="col-md-7 col-sm-12 pl-1 b-blue">
     <div class = 'row'>
       <div class="col-md-12 col-sm-12">
         <div class="form-group">
@@ -57,7 +57,7 @@
         </div>
       </div>
     </div>  
-    <div class = 'row d-flex'>
+    <div class = 'row d-flex b-red'>
       <div class="col-md-12 col-sm-12 pl-1" id = 'embed-container-video'> 
         <div class="embed-responsive embed-responsive-16by9 embed-responsive __video facebook-responsive">
           <!--youtube-->

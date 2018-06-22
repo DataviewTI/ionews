@@ -8,7 +8,6 @@
 @stop
 
 @section('main-heading')
-	Cadastro de Notícias
 @stop
 
 @section('main-content')
@@ -43,7 +42,7 @@
   @endsection
 
 @section('footer_scripts')
-@include('IntranetOne::base.social.google-youtube');
+@include('IntranetOne::base.social.google-youtube')
 
 <script src="{{ asset('js/pickadate-full.min.js') }}" type="text/javascript"></script>
 <!--<script src="{{ asset('io/vendors/dropzone/dropzone.min.js') }}" type="text/javascript"></script>-->

@@ -1,0 +1,38 @@
+{
+  "description": "News assets package for IntranetOne",
+  "license": "MIT",
+  "main": "wploader.js",
+  "name": "intranetone-news",
+  "version": "0.0.1",
+  "maintainers": [
+    {
+      "name": "Marcelo Disconzi",
+      "email": "mdisconzi@gmail.com"
+    },
+    {
+      "name": "Thiago Brauer",
+      "email": "thiagobrauer@gmail.com"
+    }
+  ],
+  "keywords": [
+    "Laravel",
+    "IntranetOne",
+    "Intranet CMS",
+    "Dataview",
+    "News",
+    "Blog",
+    "Posts"
+  ],
+  "IODependencies": {
+    "intranetone":"^2.0.5",
+    "sortablejs": "^1.6.0",
+    "dropzone": "^5.1.1",
+    "moment": "^2.21.0",
+    "moment-duration-format": "^2.2.2",
+    "dv-wickedpicker": "^0.0.1",
+    "tinymce":"4.7.13"
+  },
+  "ignore": [
+    "node_modules"
+  ]
+}

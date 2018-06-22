@@ -12,8 +12,8 @@
             "cat"=>"News"
           ]
         ],
-        ["name" => "Imagens", "view"=> "News::form-images"],
-        ["name" => "Video", "view"=> "News::form-video"],
+        ["name" => "Imagens", "view"=> "IntranetOne::io.forms.form-images"],
+        ["name" => "Video", "view"=> "IntranetOne::io.forms.form-video"],
       ]
   ])
   @endcomponent

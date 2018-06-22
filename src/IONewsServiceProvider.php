@@ -3,10 +3,13 @@
 namespace Dataview\IONews;
 
 use Illuminate\Support\ServiceProvider;
-use Dataview\IONews\Console\IONewsInstallCommand;
 
 class IONewsServiceProvider extends ServiceProvider
 {
+    public static function pkgAddr($addr){
+      return __DIR__.'/'.$addr;
+    }
+    
     public function boot()
     {
       $this->loadViewsFrom(__DIR__.'/views', 'News');
@@ -17,7 +20,8 @@ class IONewsServiceProvider extends ServiceProvider
     public function register()
     {
       $this->commands([
-        IONewsInstallCommand::class,
+        Console\Install::class,
+        Console\Remove::class
       ]);
 
       $this->app['router']->group(['namespace' => 'dataview\ionews'], function () {
