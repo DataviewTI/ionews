@@ -27,6 +27,14 @@
 						"icon"=>"ico ico-new",
 						"view"=>"News::form"
 					],
+					[
+						"tab"=>"Categorias",
+						"icon"=>"ico ico-structure-2",
+						"view"=>"IntranetOne::io.layout.categories-crud",
+						"params"=>[
+							"cat"=>"News"
+						]
+					],
 				]
 			])
 			@endcomponent
