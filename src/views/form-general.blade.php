@@ -32,7 +32,7 @@
     <div class="col-md-3 col-sm-12">
       <div class="form-group">
         <label for = 'featured' class = 'bmd-label-static d-block' style = 'font-size:14px'>Notícia em Destaque?</label>
-        <button type="button" class="float-right mt-3 btn btn-lg aanjulena-btn-toggle" data-toggle="button" aria-pressed="false" data-default-state='false' autocomplete="off" name = 'featured' id = 'featured'>
+        <button type="button" class="mt-3 btn btn-lg aanjulena-btn-toggle" data-toggle="button" aria-pressed="false" data-default-state='false' autocomplete="off" name = 'featured' id = 'featured'>
         <div class="handle"></div>
         </button>
         <input type = 'hidden' name = '__featured' id = '__featured' />
