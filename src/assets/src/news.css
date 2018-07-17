@@ -13,35 +13,12 @@
   color:#0275d8;
 } 
 
-.imagens-step-content .form-group.fv-plugins-icon-container{
-  position:absolute;
-  right:24px;
-  top:0;
-}
-
-.imagens-step-content .fv-plugins-icon{
-  position: absolute;
-  right: -34px;
-  text-align: center;
-  top: -5px;
-}
-
-.categorias-step-content .fv-plugins-icon{
-  position: absolute;
-  right: -9px;
-  text-align: center;
-  top: -9px;
-}
-
 .__sortable-list{
-  height:380px;
+  height:350px;
 }
 
 .aanjulena-btn-toggle.btn-lg{
   margin: 12px 3rem!important;
 }
-
-
-
 
 
