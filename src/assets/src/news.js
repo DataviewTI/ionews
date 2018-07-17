@@ -24,7 +24,7 @@ new IOService({
       clearable: false,
       beforeShow:function(e,t){
        $(t).css({'width':$(e).parent().width()+'px'});
-       self.df.formValidation('revalidateField','video_start_at');
+       self.fv[4].revalidateField('video_start_at');
       },
      });      
 
@@ -32,7 +32,7 @@ new IOService({
       //para evitar chamadas redundantes
         if($(this).attr('data-old-value') != $(this).val()){
           $(this).attr('data-old-value',$(this).val())
-            self.df.formValidation('revalidateField','video_start_at');
+            self.fv[4].revalidateField('video_start_at');
         }
      });
     
@@ -42,7 +42,7 @@ new IOService({
         onClose:function(){
         }
       }).pickadate('picker').on('render', function(){
-        self.df.formValidation('revalidateField', 'date');
+        self.fv[0].revalidateField('date');
     });
 
      $('#btn-get-current-time').on('click',function(){
@@ -69,7 +69,7 @@ new IOService({
           group:"sl-categories",
           onAdd: function (evt) {
             var item = evt.item;
-            self.df.formValidation('revalidateField', '__cat_subcats');
+            self.fv[2].revalidateField('__cat_subcats');
           },
           sort:false,
         });
@@ -95,7 +95,7 @@ new IOService({
         $("[name='rg']").focus();
       }
     }).pickadate('picker').on('render', function(){
-      self.df.formValidation('revalidateField', 'date');
+      self.fv[0].revalidateField('date');
     });
   
     //pillbox and other fuelux initialization
@@ -157,7 +157,7 @@ new IOService({
         height: 310,
         setup:function(editor){
           editor.on('keyup', function(e) {
-            self.df.formValidation('revalidateField', 'content');
+            self.fv[1].revalidateField('content');
           });
         },	
         image_class_list: [
@@ -304,193 +304,267 @@ new IOService({
       $('[data-toggle="tooltip"]').tooltip();
     });
 
-   /* locale:self.df.formValidation.defaults.locale,
-    framework:self.df.formValidation.defaults.framework,
-    icon: self.df.formValidation.defaults.icon,
-    excluded: self.df.formValidation.defaults.disabled,*/
-    //FormValidation initialization
-    self.fv = self.df.formValidation({
-      locale: 'pt_BR',
-      excluded: 'disabled',
-      framework: 'bootstrap',  
-      icon: {
-        valid: 'fv-ico ico-check',
-        invalid: 'fv-ico ico-close',
-        validating: 'fv-ico ico-gear ico-spin'
-      },
-      fields:{
-        title:{
-          validators:{
-            notEmpty:{
-              message: 'O título da notícia é obrigatório!'
-            }
-          }
-        },
-        date:{
-          validators:{
-            notEmpty:{
-              message: 'O data da notícia é obrigatória'
-            },
-            date:{
-              format: 'DD/MM/YYYY',
-              message: 'Informe uma data válida!'
-            }
-          }
-        },
-        by:{
-          validators:{
-            notEmpty:{
-              message: 'O responsável pela notícia deve ser informado!'
-            }
-          }
-        },
-        content:{
-          validators:{
-            callback:{
-              message: 'O conteúdo da notícia não pode ter menos que 10 caracteres!',
-              callback: function(value, validator, $field){
-                var text = tinymce.get('content').getContent({format: 'text'});
-                return text.length >= 10;
+    
+    let form = document.getElementById(self.dfId);
+    let fv1 = FormValidation.formValidation(
+      form.querySelector('.step-pane[data-step="1"]'),
+      {
+        fields: {
+          title:{
+            validators:{
+              notEmpty:{
+                message: 'O título da notícia é obrigatório!'
               }
             }
-          }
-        },
-        __cat_subcats:{
-          validators:{
-            callback:{
-              message: 'A notícia deve ter no mínimo uma categoria vinculada!',
-              callback: function(value, validator, $field){
-                return $('#__sl-main-group button.list-group-item').length > 0;
+          },
+          date:{
+            validators:{
+              notEmpty:{
+                message: 'O data da notícia é obrigatória'
+              },
+              date:{
+                format: 'DD/MM/YYYY',
+                message: 'Informe uma data válida!'
               }
             }
-          }
-        },
-        has_images:{
-          validators:{
-            callback:{
-              message: 'A notícia deve ter no mínimo uma imagem!',
-              callback: function(value, validator, $field){
-                
-                if(self.dz.files.length>0)
-                  return true
-                
-                toastr["error"]("A notícia deve conter no mínimo uma imagem!")
-                
-                return false;
+          },
+          by:{
+            validators:{
+              notEmpty:{
+                message: 'O responsável pela notícia deve ser informado!'
               }
             }
-          }
+          },
         },
-        video_url:{
-          validators:{
-            promise:{
-              promise: function(value, validator, $field){
-                let dfd   = new $.Deferred(),
-                    video = getVideoInfos($('#video_url').val()),
-                    prom;
-                
-                if(video.source != null){
-                  $('#embed-container-video').addClass('loading');
-                  switch(video.source){
-                    case 'youtube':
-                      prom = getYoutubeVideoPromise(video,self);
-                      break;
-                    case 'facebook':
-                      prom = getFacebookVideoPromise(video,self);
-                      break;
-                  }
-                    
-                  prom.then(resolve=>{
-                    resolve.callback(resolve);
-                    $('#video_title').val(video.infos.title);
-                    $('#video_description').val(video.infos.description);
-                    $('#video_start_at').removeAttr('disabled');
-                    $('#btn-get-current-time').removeClass('__disabled mouse-off');
-
-                    makeVideoThumbs(video,self);
-                    $('#video_data').val(JSON.stringify(video));
-                    dfd.resolve({ valid: true });
-                    
-                    if($('#video_url').attr('data-loaded')!==undefined){
-                      let vdata = JSON.parse($('#video_url').attr('data-loaded'));
-                      //what need to call twice??
-                      let vthumb = JSON.parse(JSON.parse($('#video_url').attr('data-thumb')));
-                      $('#video_title').val(vdata.title)
-                      $('#video_description').val(vdata.description)
-                      $($('.container-video-thumb .video-thumb')[vthumb.pos]).css({
-                        'backgroundImage': "url('"+vthumb.url+"')"
-                      }).trigger('click');
-
-                      $('#video_url').removeAttr('data-loaded').removeAttr('data-thumb');
+        plugins: {
+          trigger: new FormValidation.plugins.Trigger(),
+          submitButton: new FormValidation.plugins.SubmitButton(),
+          // defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+          bootstrap: new FormValidation.plugins.Bootstrap(),
+          icon: new FormValidation.plugins.Icon({
+            valid: 'fv-ico ico-check',
+            invalid: 'fv-ico ico-close',
+            validating: 'fv-ico ico-gear ico-spin'
+          }),
+        },
+    }).setLocale('pt_BR', FormValidation.locales.pt_BR);
+    
+    let fv2 = FormValidation.formValidation(
+      form.querySelector('.step-pane[data-step="2"]'),
+      {
+        fields: {
+          content:{
+            validators:{
+              callback:{
+                message: 'O conteúdo da notícia não pode ter menos que 10 caracteres!',
+                callback: function(value, validator, $field){
+                  var text = tinymce.get('content').getContent({format: 'text'});
+                  return text.length >= 10;
+                }
+              }
+            }
+          },
+        },
+        plugins: {
+          trigger: new FormValidation.plugins.Trigger(),
+          submitButton: new FormValidation.plugins.SubmitButton(),
+          // defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+          bootstrap: new FormValidation.plugins.Bootstrap(),
+          icon: new FormValidation.plugins.Icon({
+            valid: 'fv-ico ico-check',
+            invalid: 'fv-ico ico-close',
+            validating: 'fv-ico ico-gear ico-spin'
+          }),
+        },
+    }).setLocale('pt_BR', FormValidation.locales.pt_BR);
+    
+    let fv3 = FormValidation.formValidation(
+      form.querySelector('.step-pane[data-step="3"]'),
+      {
+        fields: {
+          __cat_subcats:{
+            validators:{
+              callback:{
+                message: 'A notícia deve ter no mínimo uma categoria vinculada!',
+                callback: function(value, validator, $field){
+                  return $('#__sl-main-group button.list-group-item').length > 0;
+                }
+              }
+            }
+          },
+        },
+        plugins: {
+          trigger: new FormValidation.plugins.Trigger(),
+          submitButton: new FormValidation.plugins.SubmitButton(),
+          // defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+          bootstrap: new FormValidation.plugins.Bootstrap(),
+          icon: new FormValidation.plugins.Icon({
+            valid: 'fv-ico ico-check',
+            invalid: 'fv-ico ico-close',
+            validating: 'fv-ico ico-gear ico-spin'
+          }),
+        },
+    }).setLocale('pt_BR', FormValidation.locales.pt_BR);
+    console.log(form.querySelector('.step-pane[data-step="4"]'));
+    
+    let fv4 = FormValidation.formValidation(
+      form.querySelector('.step-pane[data-step="4"]'),
+      {
+        fields: { 
+          has_images:{
+            validators:{
+              callback:{
+                message: 'A notícia deve ter no mínimo uma imagem!',
+                callback: function(input){
+                  console.log(self.dz.files.length);
+                  
+                  if(self.dz.files.length>0)
+                    return true;
+                  
+                  toastr["error"]("A notícia deve conter no mínimo uma imagem!");
+                  
+                  return false;
+                }
+              }
+            }
+          },
+        },
+        plugins: {
+          trigger: new FormValidation.plugins.Trigger(),
+          submitButton: new FormValidation.plugins.SubmitButton(),
+          // defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+          bootstrap: new FormValidation.plugins.Bootstrap(),
+          icon: new FormValidation.plugins.Icon({
+            valid: 'fv-ico ico-check',
+            invalid: 'fv-ico ico-close',
+            validating: 'fv-ico ico-gear ico-spin'
+          }),
+        },
+    }).setLocale('pt_BR', FormValidation.locales.pt_BR);
+    
+    let fv5 = FormValidation.formValidation(
+      form.querySelector('.step-pane[data-step="5"]'),
+      {
+        fields: {
+          video_url:{
+            validators:{
+              promise:{
+                promise: function(input){
+                  let dfd = new $.Deferred(),
+                  video = getVideoInfos($('#video_url').val()),
+                  prom;
+                  
+                  if(video.source != null){
+                    $('#embed-container-video').addClass('loading');
+                    switch(video.source){
+                      case 'youtube':
+                        prom = getYoutubeVideoPromise(video,self);
+                        break;
+                      case 'facebook':
+                        prom = getFacebookVideoPromise(video,self);
+                        break;
                     }
-                    return dfd.promise();
-                  }).
-                  catch(reject=>{
-                    console.log(reject);
-                    reject.callback(reject);
-                    let msg = reject.data != null ? reject.data : "Este link não corresponde a nenhum vídeo válido"
+                      
+                    prom.then(resolve=>{
+                      resolve.callback(resolve);
+                      $('#video_title').val(video.infos.title);
+                      $('#video_description').val(video.infos.description);
+                      $('#video_start_at').removeAttr('disabled');
+                      $('#btn-get-current-time').removeClass('__disabled mouse-off');
+  
+                      makeVideoThumbs(video,self);
+                      $('#video_data').val(JSON.stringify(video));
+                      dfd.resolve({ valid: true });
+                      
+                      if($('#video_url').attr('data-loaded')!==undefined){
+                        let vdata = JSON.parse($('#video_url').attr('data-loaded'));
+                        //what need to call twice??
+                        let vthumb = JSON.parse(JSON.parse($('#video_url').attr('data-thumb')));
+                        $('#video_title').val(vdata.title)
+                        $('#video_description').val(vdata.description)
+                        $($('.container-video-thumb .video-thumb')[vthumb.pos]).css({
+                          'backgroundImage': "url('"+vthumb.url+"')"
+                        }).trigger('click');
+  
+                        $('#video_url').removeAttr('data-loaded').removeAttr('data-thumb');
+                      }
+                      return dfd.promise();
+                    }).
+                    catch(reject=>{
+                      console.log(reject);
+                      reject.callback(reject);
+                      let msg = reject.data != null ? reject.data : "Este link não corresponde a nenhum vídeo válido"
+                      dfd.reject({
+                        valid:false,
+                        message: msg
+                      });
+                    });
+                  }
+                  else{
+                    videoUnload(self);
+                    if($('#video_url').val()=='')
+                      dfd.resolve({ valid: true });
+                    else
                     dfd.reject({
                       valid:false,
-                      message: msg
+                      message: "Este link não corresponde a nenhum vídeo válido"
                     });
-                  });
-                }
-                else{
-                  videoUnload(self);
-                  if($('#video_url').val()=='')
-                    dfd.resolve({ valid: true });
-                  else
-                  dfd.reject({
-                    valid:false,
-                    message: "Este link não corresponde a nenhum vídeo válido"
-                  });
-                
-                }
-                return dfd.promise();
+                  
+                  }
+                  return dfd.promise();
+                },
+                message: 'O link do vídeo informado é inválido',
               },
-              message: 'O link do vídeo informado é inválido',
-            },
-          }
-        },
-        video_start_at:{
-          validators:{
-            callback:{
-              callback:function(value, validator, $field){
-                let dur = moment.duration(value.replace(/\s/g,''));
-                let isodur = $('#video_start_at').attr('data-video-duration')
-                if(isodur !== undefined && isodur != null){
-                  if(dur.asSeconds() > moment.duration(isodur).asSeconds())
-                    return {
-                      valid:false,
-                      message:'Início máximo em '+moment.duration(isodur,"minutes").format("H:mm:ss")
-                    }
-                }
-                return true;
-             },
-            },
-          }
-        },
-        video_date:{
-          validators:{
-            date:{
-              format: 'DD/MM/YYYY',
-              message: 'Informe uma data válida!'
             }
-          }
+          },
+          video_start_at:{
+            validators:{
+              callback:{
+                callback:function(input){
+                  let dur = moment.duration(input.value.replace(/\s/g,''));
+                  let isodur = $('#video_start_at').attr('data-video-duration')
+                  if(isodur !== undefined && isodur != null){
+                    if(dur.asSeconds() > moment.duration(isodur).asSeconds())
+                      return {
+                        valid:false,
+                        message:'Início máximo em '+moment.duration(isodur,"minutes").format("H:mm:ss")
+                      }
+                  }
+                  return true;
+                },
+              },
+            }
+          },
+          video_date:{
+            validators:{
+              date:{
+                format: 'DD/MM/YYYY',
+                message: 'Informe uma data válida!'
+              }
+            }
+          },
         },
-      }
-    }).on('err.field.fv', function(e, data){
-      //nothing to do yet
-    }).on('success.form.fv', function(e){
-      
-    });
+        plugins: {
+          trigger: new FormValidation.plugins.Trigger(),
+          submitButton: new FormValidation.plugins.SubmitButton(),
+          // defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+          bootstrap: new FormValidation.plugins.Bootstrap(),
+          icon: new FormValidation.plugins.Icon({
+            valid: 'fv-ico ico-check',
+            invalid: 'fv-ico ico-close',
+            validating: 'fv-ico ico-gear ico-spin'
+          }),
+        },
+    }).setLocale('pt_BR', FormValidation.locales.pt_BR);
+
+    self.fv = [fv1, fv2, fv3, fv4, fv5];
   
     //Dropzone initialization
     self.dz = new DropZoneLoader({
       id:'#custom-dropzone',
       thumbnailWidth: 240,
       thumbnailHeight: 180,
-      copy_params:{
+      copy_params:{ 
         original:true,
         sizes:{
         'sm':{'w':400,'h':300},
@@ -498,10 +572,10 @@ new IOService({
         }
       },
       removedFile:function(file){
-        self.df.formValidation('revalidateField', 'has_images');
+        self.fv[3].revalidateField('has_images');
       },
       onSuccess:function(file,ret){
-        self.df.formValidation('revalidateField', 'has_images');        
+        self.fv[3].revalidateField('has_images');
       }
     });
 
@@ -543,10 +617,12 @@ new IOService({
             }
           });
       });
-      self.df.formValidation('revalidateField', '__cat_subcats');
+      self.fv[2].revalidateField('__cat_subcats');
       self.dz.removeAllFiles(true);
       videoUnload(self);
-      self.df.formValidation('revalidateField', '__has_images');
+      // self.df.formValidation('revalidateField', '__has_images'); __has_images?
+      self.fv[3].revalidateField('has_images');
+
     }
 });//the end ??
 
@@ -812,7 +888,7 @@ function view(self){
           if(data.video_id != null){
             $('#video_url').attr('data-loaded',JSON.stringify(data.video)).val(data.video.url);
             $('#video_url').attr('data-thumb',JSON.stringify(data.video.thumbnail));
-            self.df.formValidation('revalidateField', 'video_url');
+            self.fv[4].revalidateField('video_url');
 
             if(data.video.date!=null)
               $("#video_date").pickadate('picker').set('select',new Date(data.video.date));
@@ -838,7 +914,7 @@ function view(self){
           }
 
           tinymce.get('content').setContent(data.content);
-          self.df.formValidation('revalidateField', 'content');
+          self.fv[1].revalidateField('content');
 
           //reload categorias
           //zera as categorias no unload
@@ -851,7 +927,7 @@ function view(self){
             $('.__sortable-list').not('#__sl-main-group').find(".list-group-item[__val='"+i+"']")
             .appendTo($('#__sl-main-group'));
           });
-          self.df.formValidation('revalidateField','__cat_subcats');
+          self.fv[2].revalidateField('__cat_subcats');
           
           //reload imagens 
           self.dz.removeAllFiles(true);
