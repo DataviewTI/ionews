@@ -19,6 +19,13 @@ class NewsSeeder extends Seeder
             'order' => Service::max('order')+1
           ]);
       }
+      //seta privilegios padrão para o role admin
+      $rolse = Sentinel::findRoleBySlug('admin');
+      $rolse->addPermission('news.view');
+      $rolse->addPermission('news.create');
+      $rolse->addPermission('news.update');
+      $rolse->addPermission('news.delete');
+      $rolse->save();
 
       //Adiciona a categoria e subcategorias padrão
       if(!Category::where('Category','News')->exists()){
@@ -41,13 +48,6 @@ class NewsSeeder extends Seeder
           ]);
         }
       }
-
-      //seta privilegios padrão para o user admin
-      $user = Sentinel::findById(1);
-      $user->addPermission('news.view');
-      $user->addPermission('news.create');
-      $user->addPermission('news.update');
-      $user->addPermission('news.delete');
-      $user->save();
+      
     }
 } 
