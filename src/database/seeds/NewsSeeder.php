@@ -20,12 +20,12 @@ class NewsSeeder extends Seeder
           ]);
       }
       //seta privilegios padrão para o role admin
-      $rolse = Sentinel::findRoleBySlug('admin');
-      $rolse->addPermission('news.view');
-      $rolse->addPermission('news.create');
-      $rolse->addPermission('news.update');
-      $rolse->addPermission('news.delete');
-      $rolse->save();
+      $adminRole = Sentinel::findRoleBySlug('admin');
+      $adminRole->addPermission('news.view');
+      $adminRole->addPermission('news.create');
+      $adminRole->addPermission('news.update');
+      $adminRole->addPermission('news.delete');
+      $adminRole->save();
 
       //Adiciona a categoria e subcategorias padrão
       if(!Category::where('Category','News')->exists()){
