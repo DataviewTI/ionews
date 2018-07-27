@@ -139,7 +139,6 @@ new IOService({
           //moxiemanager_image_template: "<a href='#'><img src='{$meta.thumb_url}' class = 'XXX'/></a>",
           moxiemanager_view : 'thumbs',
           onsave: function(args) {
-            console.log(args.file);
           }          
         },
         relative_urls:false,//moxi
@@ -405,7 +404,6 @@ new IOService({
           }),
         },
     }).setLocale('pt_BR', FormValidation.locales.pt_BR);
-    console.log(form.querySelector('.step-pane[data-step="4"]'));
     
     let fv4 = FormValidation.formValidation(
       form.querySelector('.step-pane[data-step="4"]'),
@@ -416,14 +414,13 @@ new IOService({
               callback:{
                 message: 'A notícia deve ter no mínimo uma imagem!',
                 callback: function(input){
-                  console.log(self.dz.files.length);
                   
-                  if(self.dz.files.length>0)
+                  if(self.dz.files.length>0){
                     return true;
-                  
-                  toastr["error"]("A notícia deve conter no mínimo uma imagem!");
-                  
-                  return false;
+
+                    toastr["error"]("A notícia deve conter no mínimo uma imagem!");
+                    return false;
+                  }
                 }
               }
             }
@@ -491,7 +488,6 @@ new IOService({
                       return dfd.promise();
                     }).
                     catch(reject=>{
-                      console.log(reject);
                       reject.callback(reject);
                       let msg = reject.data != null ? reject.data : "Este link não corresponde a nenhum vídeo válido"
                       dfd.reject({
@@ -572,7 +568,7 @@ new IOService({
         }
       },
       removedFile:function(file){
-        self.fv[3].revalidateField('has_images');
+        //self.fv[3].revalidateField('has_images');
       },
       onSuccess:function(file,ret){
         self.fv[3].revalidateField('has_images');
