@@ -64,7 +64,7 @@ class NewsController extends IOController{
     if($request->video_url != null){
       $_vdata = json_decode($request->video_data);
       
-      $news->video()->associate(Video::create([
+      $obj->video()->associate(Video::create([
         'url' => $request->video_url,
         'source' => $_vdata->source,
         'title' => $request->video_title,
@@ -74,7 +74,7 @@ class NewsController extends IOController{
         'data' => $request->video_data,
         'start_at' => $request->start_at
       ]));
-      $news->save();
+      $obj->save();
     }
 
     return response()->json(['success'=>true,'data'=>null]);
