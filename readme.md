@@ -1,34 +1,32 @@
 
-# Galeria de fotos para IntranetOne
-Cadastro de Notícias...
-IONews requires IntranetOne
+# Cadastro de Notícias para IntranetOne
+Cadastro de Notícias para IntranetOne. IONews requires IntranetOne.
 ## Conteúdo
  
-- [Instalação](#instalação)
-- [Assets](#assets) 
-
 ## Instalação
 
 ```sh
 composer require dataview/ionews
 ```
-Instalar o IntranetOne com php artisan
 ```sh
-php artisan intranetone-news:install
+php artisan io-news:install
 ```
 
+- Configure o webpack conforme abaixo 
+```js
+...
+let news = require('io-news');
+io.compile({
+  services:{
+    ...
+    new news()
+    ...
+  }
+});
 
-## Assets
-  
- - Instalar pacote js da intranetone
- `bower install intranetone-news --save`
-
-
-### Configurações Manuais
-
-Abrir o package em "resources/vendors/dataview-intranetone-news/src" e inserir o conteúdo do arquivo "append_webpack.js" no webpack do projeto
-
- - Compilar os assets e fazer cache
- `npm run dev|prod|watch`
- `php artisan config:cache`
- 
+```
+- Compile os assets e faça o cache
+```sh
+npm run dev|prod|watch
+php artisan config:cache
+```
