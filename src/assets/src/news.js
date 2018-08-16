@@ -617,7 +617,7 @@ new IOService({
       self.dz.removeAllFiles(true);
       videoUnload(self);
       // self.df.formValidation('revalidateField', '__has_images'); __has_images?
-      self.fv[3].revalidateField('has_images');
+      // self.fv[3].revalidateField('has_images');
 
     }
 });//the end ??
