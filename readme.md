@@ -17,11 +17,11 @@ php artisan io-news:install
 ...
 let news = require('io-news');
 io.compile({
-  services:{
+  services:[
     ...
-    new news()
+    new news(),
     ...
-  }
+  ]
 });
 
 ```
