@@ -15,7 +15,7 @@ php artisan io-news:install
 - Configure o webpack conforme abaixo 
 ```js
 ...
-let news = require('io-news');
+let news = require('intranetone-news');
 io.compile({
   services:[
     ...
