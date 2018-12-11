@@ -19,6 +19,15 @@ class NewsSeeder extends Seeder
             'order' => Service::max('order')+1
           ]);
       }
+
+      //seta privilegios padrão para o user odin
+      $odinRole = Sentinel::findRoleBySlug('odin');
+      $odinRole->addPermission('news.view');
+      $odinRole->addPermission('news.create');
+      $odinRole->addPermission('news.update');
+      $odinRole->addPermission('news.delete');
+      $odinRole->save();
+
       //seta privilegios padrão para o role admin
       $adminRole = Sentinel::findRoleBySlug('admin');
       $adminRole->addPermission('news.view');
