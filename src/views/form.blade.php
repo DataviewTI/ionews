@@ -12,7 +12,10 @@
             "cat"=>"News"
           ]
         ],
-        ["name" => "Imagens", "view"=> "IntranetOne::io.forms.form-images"],
+        ["name" => "Imagens", "view"=> "IntranetOne::io.forms.form-images",
+          "params"=>[
+            "id"=>"custom-dropzone"
+        ]],
         ["name" => "Video", "view"=> "IntranetOne::io.forms.form-video"],
       ]
   ])
