@@ -3,7 +3,7 @@
   "license": "MIT",
   "main": "wploader.js",
   "name": "intranetone-news",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "maintainers": [
     {
       "name": "Marcelo Disconzi",
@@ -12,6 +12,10 @@
     {
       "name": "Thiago Brauer",
       "email": "thiagobrauer@gmail.com"
+    },
+    {
+      "name": "Luis Disconzi",
+      "email": "luis@dataview.com.br"
     }
   ],
   "keywords": [
@@ -29,7 +33,7 @@
     "moment": "^2.21.0",
     "moment-duration-format": "^2.2.2",
     "dv-wickedpicker": "^0.0.1",
-    "tinymce":"4.7.13"
+    "tinymce": "4.7.13"
   },
   "ignore": [
     "node_modules"
