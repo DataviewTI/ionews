@@ -13,6 +13,7 @@ class NewsSeeder extends Seeder
       if(!Service::where('service','News')->exists()){
         Service::insert([
             'service' => "News",
+            'trans' => 'Notícias',
             'ico' => 'ico-news',
             'alias'=>'news',
             'description' => 'Cadastro de Notícias',
