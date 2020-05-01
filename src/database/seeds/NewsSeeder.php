@@ -5,6 +5,7 @@ use Illuminate\Database\Seeder;
 use Dataview\IntranetOne\Service;
 use Sentinel;
 use Dataview\IntranetOne\Category;
+use Illuminate\Support\Str;
 
 class NewsSeeder extends Seeder
 {
@@ -53,7 +54,7 @@ class NewsSeeder extends Seeder
             'category_id' => $news->id,
             'category' => $c,
             'erasable'=>false,
-            'category_slug' => str_slug($c),
+            'category_slug' => Str::slug($c),
             'order' => (Category::where('category_id',$news->id)->max('order'))+1
           ]);
         }
