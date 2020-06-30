@@ -19,8 +19,8 @@
         </div>
         <div class="col-md-3 col-sm-12">
           <div class="form-group">
-            <label for = 'ft_has_images' class = 'bmd-label-static'><i class = 'ico ico-filter'></i> Com Foto</label>
-            <select id = 'ft_has_images' class = 'form-control form-control-lg'>
+            <label for = 'ft_hasImages' class = 'bmd-label-static'><i class = 'ico ico-filter'></i> Com Foto</label>
+            <select id = 'ft_hasImages' class = 'form-control form-control-lg'>
               <option value = ''></option>
               <option value = '1'>Sim</option>
               <option value = '0'>Não</option>

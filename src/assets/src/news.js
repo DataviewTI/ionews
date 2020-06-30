@@ -220,7 +220,7 @@ new IOService(
 
           api.addDTSelectFilter([
             { el: $("#ft_featured"), column: "featured" },
-            { el: $("#ft_has_images"), column: "group_id" },
+            { el: $("#ft_hasImages"), column: "group_id" },
             //verificar cats e subcats durante os filtros, tem que fazer outras N verificações
             {
               el: $("#ft_category"),
@@ -534,7 +534,7 @@ new IOService(
       form.querySelector('.step-pane[data-step="4"]'),
       {
         fields: {
-          has_images: {
+          hasImages: {
             validators: {
               callback: {
                 message: "A notícia deve ter no mínimo uma imagem!",
@@ -713,10 +713,10 @@ new IOService(
         },
       },
       removedFile: function(file) {
-        //self.fv[3].revalidateField('has_images');
+        //self.fv[3].revalidateField('hasImages');
       },
       onSuccess: function(file, ret) {
-        self.fv[3].revalidateField("has_images");
+        self.fv[3].revalidateField("hasImages");
       },
     });
 
@@ -775,8 +775,8 @@ new IOService(
       self.fv[2].revalidateField("__cat_subcats");
       self.dz.removeAllFiles(true);
       videoUnload(self);
-      // self.df.formValidation('revalidateField', '__has_images'); __has_images?
-      // self.fv[3].revalidateField('has_images');
+      // self.df.formValidation('revalidateField', '__hasIimages'); __hasImages?
+      // self.fv[3].revalidateField('hasImages');
     };
   }
 ); //the end ??

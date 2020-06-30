@@ -1,26 +1,26 @@
 {
-    "name": "dataview/ionews",
-    "description": "serviço de notícias da intranetone",
-    "authors": [
-        {
-            "name": "mdisconzi",
-            "email": "mdisconzi@bitbucket.org"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-        "Dataview\\IONews\\": "src/"
-        }
-      },
-    "require": {
-      "dataview/intranetone": "*",
-      "intervention/image": "^2.4"
-    },
-    "extra": {
-      "laravel": {
-          "providers": [
-              "\\Dataview\\IONews\\IONewsServiceProvider"
-          ]
-      }
+  "name": "dataview/ionews",
+  "description": "serviço de notícias da intranetone",
+  "authors": [
+    {
+      "name": "mdisconzi",
+      "email": "mdisconzi@bitbucket.org"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Dataview\\IONews\\": "src/"
+    }
+  },
+  "require": {
+    "dataview/intranetone": "*",
+    "intervention/image": "^2.5.1"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "\\Dataview\\IONews\\IONewsServiceProvider"
+      ]
+    }
   }
 }
