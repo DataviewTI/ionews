@@ -7,7 +7,7 @@ new IOService({
         $('#__featured').val($(this).attr('aria-pressed'));
       }
     });
-    
+
     //video configs
     $(".video-thumb").each(function(i,obj){
       $(obj).on('click',function(){
@@ -15,7 +15,7 @@ new IOService({
           $(this).addClass('active');
       });
     });
-    
+
     $('#video_start_at').wickedpicker({
       now: "00:00:00",
       clearable: false,
@@ -26,7 +26,7 @@ new IOService({
        $(t).css({'width':$(e).parent().width()+'px'});
        self.fv[4].revalidateField('video_start_at');
       },
-     });      
+     });
 
      $('#video_start_at').on('change',function(){
       //para evitar chamadas redundantes
@@ -35,7 +35,7 @@ new IOService({
             self.fv[4].revalidateField('video_start_at');
         }
      });
-    
+
     //pickadate objects initialization
     $('#video_date').pickadate({
         formatSubmit: 'yyyy-mm-dd 00:00:00',
@@ -60,7 +60,7 @@ new IOService({
       animation: 250,
       handle: ".dz-reorder",
     });
-    
+
     ['__sl-box-left-1','__sl-box-left-2','__sl-box-left-3','__sl-main-group'].forEach(function(obj){
       if(document.getElementById(obj)!=null)
         Sortable.create(document.getElementById(obj),{
@@ -74,8 +74,8 @@ new IOService({
           sort:false,
         });
     });
-    
-    
+
+
     //Moxie config initialization
     $.ajax({
       url: self.path+'/moxieconfig',
@@ -87,7 +87,7 @@ new IOService({
           console.warn('erro ao criar moxiemanager simlink');
       }
     });
-    
+
     //pickadate objects initialization
     $('#date').pickadate({
       formatSubmit: 'yyyy-mm-dd 00:00:00',
@@ -97,7 +97,7 @@ new IOService({
     }).pickadate('picker').on('render', function(){
       self.fv[0].revalidateField('date');
     });
-  
+
     //pillbox and other fuelux initialization
     $('#keywords').pillbox({
       edit:true,
@@ -124,7 +124,7 @@ new IOService({
         callback(data);
       }
     });
-    
+
     $('#kws-container span').on('click',function(e){
       $('#keywords').pillbox('addColorItem',{text:$(this).text(),value:$(this).text()},'random',true);
       $(this).remove();
@@ -139,7 +139,7 @@ new IOService({
           //moxiemanager_image_template: "<a href='#'><img src='{$meta.thumb_url}' class = 'XXX'/></a>",
           moxiemanager_view : 'thumbs',
           onsave: function(args) {
-          }          
+          }
         },
         relative_urls:false,//moxi
         paste_auto_cleanup_on_paste : true,
@@ -158,7 +158,7 @@ new IOService({
           editor.on('keyup', function(e) {
             self.fv[1].revalidateField('content');
           });
-        },	
+        },
         image_class_list: [
           {title: 'img-fluid', value: 'img-fluid'},
           {title: 'img-fluid w-100', value: 'img-fluid w-100'},
@@ -167,7 +167,7 @@ new IOService({
           { title : 'Paragraph', block : 'p', classes : '', styles : { } },
           { title : 'Header 1', block : 'h1', classes : '', styles : { } },
         ]*/
-      });        
+      });
 
     //Datatables initialization
     self.dt = $('#default-table').DataTable({
@@ -178,7 +178,7 @@ new IOService({
         let api = this.api();
         this.teste = 10;
         $.fn.dataTable.defaults.initComplete(this);
-  
+
         api.addDTSelectFilter([
           {el:$('#ft_featured'),column:'featured'},
           {el:$('#ft_has_images'),column:'group_id'},
@@ -186,24 +186,24 @@ new IOService({
           {el:$('#ft_category'),column:'categories',format:"|{{value}}|"},
           {el:$('#ft_subcategory'),column:'categories',format:"|{{value}}|"},
         ]);
-          
+
         $('#ft_dtini').pickadate().pickadate('picker').on('render', function(){
           api.draw()
         });
-        
+
         $('#ft_dtfim').pickadate().pickadate('picker').on('render', function(){
           api.draw()
         });
-        
-        
+
+
         api.addDTBetweenDatesFilter({
             column:'date',
             min: $('#ft_dtini'),
             max: $('#ft_dtfim')
         });
-        
+
         $("#ft_category").change(function(e){
-          if($(this).val()=='') 
+          if($(this).val()=='')
             $("#ft_subcategory").prop('disabled','disabled').find('option').remove().end();
           else
             $.ajax({
@@ -221,7 +221,7 @@ new IOService({
                 else
                   $("#ft_subcategory").prop('disabled','disabled').find('option').remove();
               }
-            });	
+            });
         });
       },
       footerCallback:function(row, data, start, end, display){
@@ -247,7 +247,7 @@ new IOService({
               if(c.parent!='' && c.parent!= null && !cats.includes(c.parent.category))
                 cats.push(c.parent.category)
             });
-            
+
             return self.dt.addDTIcon({ico:'ico-structure',title:"<span class = 'text-left'>"+(cats.join('<br>'))+"</span>",value:1,pos:'right',_class:'text-primary text-normal',html:true}
               );
           }
@@ -283,13 +283,13 @@ new IOService({
         {targets:'__dt_acoes',width:"7%",className:"text-center",searchable:false,orderable:false,render:function(data,type,row,y){
             return self.dt.addDTButtons({
               buttons:[
-                {ico:'ico-eye',_class:'text-primary',title:'preview'},
+                // {ico:'ico-eye',_class:'text-primary',title:'preview'},
                 {ico:'ico-trash',_class:'text-danger',title:'excluir'},
                 {ico:'ico-edit',_class:'text-info',title:'editar'}
             ]});
           }
         }
-      ]	
+      ]
     }).on('click',".btn-dt-button[data-original-title=editar]",function(){
       var data = self.dt.row($(this).parents('tr')).data();
       self.view(data.id);
@@ -303,7 +303,7 @@ new IOService({
       $('[data-toggle="tooltip"]').tooltip();
     });
 
-    
+
     let form = document.getElementById(self.dfId);
     let fv1 = FormValidation.formValidation(
       form.querySelector('.step-pane[data-step="1"]'),
@@ -347,7 +347,7 @@ new IOService({
           }),
         },
     }).setLocale('pt_BR', FormValidation.locales.pt_BR);
-    
+
     let fv2 = FormValidation.formValidation(
       form.querySelector('.step-pane[data-step="2"]'),
       {
@@ -376,7 +376,7 @@ new IOService({
           }),
         },
     }).setLocale('pt_BR', FormValidation.locales.pt_BR);
-    
+
     let fv3 = FormValidation.formValidation(
       form.querySelector('.step-pane[data-step="3"]'),
       {
@@ -404,17 +404,17 @@ new IOService({
           }),
         },
     }).setLocale('pt_BR', FormValidation.locales.pt_BR);
-    
+
     let fv4 = FormValidation.formValidation(
       form.querySelector('.step-pane[data-step="4"]'),
       {
-        fields: { 
+        fields: {
           has_images:{
             validators:{
               callback:{
                 message: 'A notícia deve ter no mínimo uma imagem!',
                 callback: function(input){
-                  
+
                   if(self.dz.files.length>0){
                     return true;
 
@@ -438,7 +438,7 @@ new IOService({
           }),
         },
     }).setLocale('pt_BR', FormValidation.locales.pt_BR);
-    
+
     let fv5 = FormValidation.formValidation(
       form.querySelector('.step-pane[data-step="5"]'),
       {
@@ -450,7 +450,7 @@ new IOService({
                   let dfd = new $.Deferred(),
                   video = getVideoInfos($('#video_url').val()),
                   prom;
-                  
+
                   if(video.source != null){
                     $('#embed-container-video').addClass('loading');
                     switch(video.source){
@@ -461,18 +461,18 @@ new IOService({
                         prom = getFacebookVideoPromise(video,self);
                         break;
                     }
-                      
+
                     prom.then(resolve=>{
                       resolve.callback(resolve);
                       $('#video_title').val(video.infos.title);
                       $('#video_description').val(video.infos.description);
                       $('#video_start_at').removeAttr('disabled');
                       $('#btn-get-current-time').removeClass('__disabled mouse-off');
-  
+
                       makeVideoThumbs(video,self);
                       $('#video_data').val(JSON.stringify(video));
                       dfd.resolve({ valid: true });
-                      
+
                       if($('#video_url').attr('data-loaded')!==undefined){
                         let vdata = JSON.parse($('#video_url').attr('data-loaded'));
                         //what need to call twice??
@@ -482,7 +482,7 @@ new IOService({
                         $($('.container-video-thumb .video-thumb')[vthumb.pos]).css({
                           'backgroundImage': "url('"+vthumb.url+"')"
                         }).trigger('click');
-  
+
                         $('#video_url').removeAttr('data-loaded').removeAttr('data-thumb');
                       }
                       return dfd.promise();
@@ -505,7 +505,7 @@ new IOService({
                       valid:false,
                       message: "Este link não corresponde a nenhum vídeo válido"
                     });
-                  
+
                   }
                   return dfd.promise();
                 },
@@ -554,13 +554,13 @@ new IOService({
     }).setLocale('pt_BR', FormValidation.locales.pt_BR);
 
     self.fv = [fv1, fv2, fv3, fv4, fv5];
-  
+
     //Dropzone initialization
     self.dz = new DropZoneLoader({
       id:'#custom-dropzone',
       thumbnailWidth: 240,
       thumbnailHeight: 180,
-      copy_params:{ 
+      copy_params:{
         original:true,
         sizes:{
         'sm':{'w':400,'h':300},
@@ -584,7 +584,7 @@ new IOService({
         $("[name='__dz_images']").val(JSON.stringify(self.dz.getOrderedDataImages()));
         $("[name='__dz_copy_params']").val(JSON.stringify(self.dz.copy_params));
         $("[name='content']").val(tinymce.get('content').getContent({format: 'html'}));
-      
+
         var cats = getCatAndSubCats();
         $('#__cat_subcats').val(cats);
         $(document.createElement('input')).prop('type','hidden').prop('name','main_cat').val(cats[0]).appendTo(self.df);
@@ -627,7 +627,7 @@ new IOService({
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                                                                                                            
+
   ██╗      ██████╗  ██████╗ █████╗ ██╗         ███╗   ███╗███████╗████████╗██╗  ██╗ ██████╗ ██████╗ ███████╗
   ██║     ██╔═══██╗██╔════╝██╔══██╗██║         ████╗ ████║██╔════╝╚══██╔══╝██║  ██║██╔═══██╗██╔══██╗██╔════╝
   ██║     ██║   ██║██║     ███████║██║         ██╔████╔██║█████╗     ██║   ███████║██║   ██║██║  ██║███████╗
@@ -658,7 +658,7 @@ function getCategories(param){
     success: function(ret){
       param.callback(ret)
     }
-  });	
+  });
 }
 
 function makeVideoThumbs(video,self){
@@ -679,7 +679,7 @@ function makeVideoThumbs(video,self){
           if($(this).hasClass('active')){
             let bg = $(this).css('backgroundImage');
             $('#video_thumbnail').val(JSON.stringify({
-              pos:$(this).attr('data-pos'),  
+              pos:$(this).attr('data-pos'),
               url:bg.substring(5,bg.lastIndexOf("\""))
             }));
           }
@@ -701,7 +701,7 @@ function makeVideoThumbs(video,self){
         if($(this).hasClass('active')){
           let bg = $(this).css('backgroundImage');
           $('#video_thumbnail').val(JSON.stringify({
-            pos:$(this).attr('data-pos'),  
+            pos:$(this).attr('data-pos'),
             url:bg.substring(5,bg.lastIndexOf("\""))
           }));
          }
@@ -719,7 +719,7 @@ function getYoutubeVideoPromise(video,self){
   let _resolve = function(res){
     let player = $('#'+video.source+'-player');
     player.removeClass('d-none').attr('src',video.embed);
-    
+
     let _ytp = new YT.Player('youtube-player',{
       events: {
         'onReady': function(_t){
@@ -785,7 +785,7 @@ function getFacebookVideoPromise(video,self){
       description:res.data.description,
       duration:moment.duration(parseInt(res.data.length),'seconds').format('hh:mm:ss'),
     }
-    
+
     video.embed = video.embed+'&width='+res.data.format[0].width
     let max_video_number = (res.data.thumbnails.data.length>=3) ? 3 : res.data.thumbnails.data.length;
     for(let i=0;i<max_video_number;i++)
@@ -847,7 +847,7 @@ function getVideoInfos(url){
         '?enablejsapi=1',
         '&origin='+document.location.origin
       ].join(''),
-      thumbs:[]        
+      thumbs:[]
   }
 
   if(rgx_facebook.test(url)){
@@ -861,7 +861,7 @@ function getVideoInfos(url){
           '?href=https%3A%2F%2Fwww.facebook.com%2F',
           url_match[1]+'%2Fvideos%2F'+url_match[2]
         ].join(''),
-        thumbs:[]        
+        thumbs:[]
       }
   }
 
@@ -888,7 +888,7 @@ function view(self){
 
             if(data.video.date!=null)
               $("#video_date").pickadate('picker').set('select',new Date(data.video.date));
-            
+
               let dur = moment.duration(data.video.start_at,'seconds');
               $('#video_start_at').val(dur.format('hh : mm : ss',{trim:false}));
               $('#video_start_at').data('plugin_wickedpicker').setTime({
@@ -914,18 +914,18 @@ function view(self){
 
           //reload categorias
           //zera as categorias no unload
-          let attrcats = []; 
+          let attrcats = [];
           data.categories.forEach(function(obj){
             attrcats.push(obj.id)
           });
-           
+
           attrcats.forEach(function(i){
             $('.__sortable-list').not('#__sl-main-group').find(".list-group-item[__val='"+i+"']")
             .appendTo($('#__sl-main-group'));
           });
           self.fv[2].revalidateField('__cat_subcats');
-          
-          //reload imagens 
+
+          //reload imagens
           self.dz.removeAllFiles(true);
           if(data.group!=null){
             self.dz.reloadImages(data);
